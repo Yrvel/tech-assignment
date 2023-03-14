@@ -1,8 +1,8 @@
-﻿using System.IO;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 
 namespace PostAPI
 {
+    //A repository to return posts
     public class PostsUserRepository : IPostsUserRepistory
     {
         HttpClient client;
@@ -11,20 +11,12 @@ namespace PostAPI
         {
             client = new HttpClient();
         }
-        public async Task<List<PostUser>> GetAllPosts()
-        {
-            List<PostUser> posts =new List<PostUser>();
-            HttpResponseMessage response = await client.GetAsync(APIUrl).ConfigureAwait(false);
-            if (response.IsSuccessStatusCode)
-            {
-                posts = await response.Content?.ReadFromJsonAsync<List<PostUser>>();
-            }
-            return posts;
-        }
+
+
         public async Task<PostUser> GetPostById(int id)
         {
             using (HttpResponseMessage response = await client.GetAsync($"{APIUrl}/{id}").ConfigureAwait(false))
-            {              
+            {
                 if (response.IsSuccessStatusCode)
                 {
                     return await response.Content?.ReadFromJsonAsync<PostUser>();
@@ -32,19 +24,19 @@ namespace PostAPI
 
                 return null;
             }
-           
+
         }
 
         public async Task<List<PostUser>> GetPostsByUserId(int userId)
         {
             using (HttpResponseMessage response = await client.GetAsync($"{APIUrl}/{userId}").ConfigureAwait(false))
-            {               
+            {
                 if (response.IsSuccessStatusCode)
                 {
                     return await response.Content?.ReadFromJsonAsync<List<PostUser>>();
                 }
 
-                throw new ArgumentException();
+                return null;
             }
 
         }
@@ -52,7 +44,6 @@ namespace PostAPI
 
     public interface IPostsUserRepistory
     {
-        Task<List<PostUser>> GetAllPosts();
         Task<PostUser> GetPostById(int id);
         Task<List<PostUser>> GetPostsByUserId(int userId);
     }

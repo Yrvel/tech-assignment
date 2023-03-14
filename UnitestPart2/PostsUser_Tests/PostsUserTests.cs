@@ -1,7 +1,5 @@
 using Moq;
 using PostAPI;
-using System.Net.Sockets;
-using Xunit;
 
 namespace UnitestPart2
 {
@@ -34,7 +32,7 @@ namespace UnitestPart2
         }
 
         #region PositiveScenarios
-
+        //The PostId must be between 1 and 10= to be valid
         [Theory]
         [InlineData(1)]
         public async Task ShouldReturnAPost_WhenIdValid(int id)
@@ -44,9 +42,10 @@ namespace UnitestPart2
             Assert.Equal(postUser, postUserActual);
         }
 
+        //The UserId must be between 1 and 10 to be valid
         [Theory]
         [InlineData(1)]
-        public async Task ShouldReturnAPosts_WhenUserIdValid(int id)
+        public async Task ShouldReturnAListPosts_WhenUserIdValid(int id)
         {
             var postsUserActual = await _postsUserRepistory.GetPostsByUserId(id);
 
@@ -56,14 +55,44 @@ namespace UnitestPart2
         #endregion
 
         #region NegativeScenarios
+        //The Post Id must be specified and less or equal than 100
         [Theory]
         [InlineData(101)]
         [InlineData(null)]
-        public async Task ShouldThrowsException_WhenIdInvalid(int id)
+        public async Task ShouldReturNull_WhenPostIdInvalid(int id)
         {
             var postUserActual = await _postsUserRepistory.GetPostById(id);
 
-            Assert.Throws<ArgumentException>(() => postUserActual);
+            Assert.Null(postUserActual);
+        }
+
+        //The User Id must be specified and less or equal than 100
+        [Theory]
+        [InlineData(11)]
+        [InlineData(null)]
+        public async Task ShouldReturNull_WhenPostUserIdInvalid(int id)
+        {
+            var postsUserActual = await _postsUserRepistory.GetPostsByUserId(id);
+
+            Assert.Null(postsUserActual);
+        }
+
+        //The title and the body must be specified
+        [Theory]
+        [InlineData(1, "", "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto")]
+        [InlineData(1, "sunt aut facere repellat provident occaecati excepturi optio reprehenderit", "")]
+        public async Task ShoulNotReturnPost_WhenTitleOrBodyPostNotSpecified(int id, string title, string body)
+        {
+            var postUserActual = await _postsUserRepistory.GetPostById(id);
+            var expectedPostUser = new PostUser
+            {
+                UserId = postUserActual.Id,
+                Title = title,
+                Body = body,
+                Id = id
+            };
+
+            Assert.NotEqual(expectedPostUser, postUserActual);
         }
         #endregion
 
@@ -98,6 +127,6 @@ namespace UnitestPart2
                     Body = "et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut"
                 }
             };
-        }   
+        }        
     }
 }
