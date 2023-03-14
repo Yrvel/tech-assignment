@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "dgSpecHash": "O+lGZw3tAHGFPeIIxXhRRIG0ew5pSvRumxcfKammAPNjqN0pENdCaZrL29ClvnKBZ5wtgJPlHR7YMSa378k5zg==",
+  "success": false,
+  "projectFilePath": "C:\\Projects\\tech-assignment\\UnitestPart2\\UnitestPart2\\PostsUser.Tests.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "NU1201",
+      "level": "Error",
+      "message": "Project PostAPI is not compatible with net6.0 (.NETCoreApp,Version=v6.0). Project PostAPI supports: net7.0 (.NETCoreApp,Version=v7.0)",
+      "libraryId": "PostAPI",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
+}

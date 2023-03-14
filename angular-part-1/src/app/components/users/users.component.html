@@ -1,0 +1,29 @@
+<div class="container" style="margin-top: 70px;">
+    <h3 style="text-align:center">Users List</h3>
+    <br/>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>UserName</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th>Phone</th>
+          <th>Website</th>
+          <th>Company</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of listUsers">  
+          <td> {{ user.id }} </td>
+          <td> {{ user.name }}</td>
+          <td> {{ user.username }}</td>
+          <td> {{ user.email }}</td> 
+          <td> {{ user.address | addressFormatted}}</td>     
+          <td> {{ user.phone }}</td>     
+          <td> {{ user.website }}</td>
+          <td> {{ user.company | companyFormatted }}</td>               
+        </tr>
+      </tbody>
+    </table>

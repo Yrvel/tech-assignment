@@ -1,0 +1,12 @@
+C:\Projects\tech-assignment\UnitestPart2\PostAPI\bin\Debug\net7.0\PostAPI.deps.json
+C:\Projects\tech-assignment\UnitestPart2\PostAPI\bin\Debug\net7.0\PostAPI.dll
+C:\Projects\tech-assignment\UnitestPart2\PostAPI\bin\Debug\net7.0\PostAPI.pdb
+C:\Projects\tech-assignment\UnitestPart2\PostAPI\obj\Debug\net7.0\PostAPI.csproj.AssemblyReference.cache
+C:\Projects\tech-assignment\UnitestPart2\PostAPI\obj\Debug\net7.0\PostAPI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\tech-assignment\UnitestPart2\PostAPI\obj\Debug\net7.0\PostAPI.AssemblyInfoInputs.cache
+C:\Projects\tech-assignment\UnitestPart2\PostAPI\obj\Debug\net7.0\PostAPI.AssemblyInfo.cs
+C:\Projects\tech-assignment\UnitestPart2\PostAPI\obj\Debug\net7.0\PostAPI.csproj.CoreCompileInputs.cache
+C:\Projects\tech-assignment\UnitestPart2\PostAPI\obj\Debug\net7.0\PostAPI.dll
+C:\Projects\tech-assignment\UnitestPart2\PostAPI\obj\Debug\net7.0\refint\PostAPI.dll
+C:\Projects\tech-assignment\UnitestPart2\PostAPI\obj\Debug\net7.0\PostAPI.pdb
+C:\Projects\tech-assignment\UnitestPart2\PostAPI\obj\Debug\net7.0\ref\PostAPI.dll
