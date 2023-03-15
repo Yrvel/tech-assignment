@@ -1,4 +1,4 @@
-import { Company } from '../models/company';
+import { Company } from '../models/company.model';
 import { CompanyFormattedPipe } from './company-formatted.pipe';
 
 describe('CompanyFormattedPipe', () => {

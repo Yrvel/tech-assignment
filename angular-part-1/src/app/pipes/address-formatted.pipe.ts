@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import { Address } from '../models/address';
+import { Address } from '../models/address.model';
 
 @Pipe({name: 'addressFormatted'})
 export class AddressFormattedPipe implements PipeTransform {

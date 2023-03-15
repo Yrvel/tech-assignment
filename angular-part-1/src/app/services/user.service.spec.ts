@@ -1,7 +1,7 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { UserService } from './user.service';
-import { User } from '../models/user';
+import { User } from '../models/user.model';
 
 const dummyUserListResponse: User[] = 
  [

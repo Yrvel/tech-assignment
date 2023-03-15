@@ -1,4 +1,4 @@
-import { Address } from '../models/address';
+import { Address } from '../models/address.model';
 import { AddressFormattedPipe } from './address-formatted.pipe';
 
 describe('AddressFormattedPipe', () => {

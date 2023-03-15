@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from 'src/app/models/user';
+import { User } from 'src/app/models/user.model';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { UserService } from '../../services/user.service';
 })
 export class UsersComponent implements OnInit{
   listUsers?: User[];
-  
+
   constructor(public userService: UserService) {}
 
   ngOnInit(): void {

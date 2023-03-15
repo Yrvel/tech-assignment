@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { User } from '../models/user';
+import { User } from '../models/user.model';
 
 export class UserServiceStub {
     getUsers(): Observable<User[]>{
