@@ -1,4 +1,3 @@
-using Moq;
 using PostAPI;
 
 namespace UnitestPart2
@@ -6,99 +5,136 @@ namespace UnitestPart2
     public class PostsUserTests
     {
         private readonly IPostsUserRepistory _postsUserRepistory;
-        private readonly Mock<IPostsUserRepistory> _postsUserRepistoryMock;
-
-        private readonly PostUser postUser;
 
         public PostsUserTests()
         {
-            postUser = GetPostUserWithIdOne();
-
-            _postsUserRepistoryMock = new Mock<IPostsUserRepistory>();
-
-            _postsUserRepistoryMock.Setup(x => x.GetPostById(1))
-                  .Returns(Task.FromResult(postUser));
-
-            _postsUserRepistoryMock.Setup(x => x.GetPostsByUserId(1))
-                  .Returns(Task.FromResult(GetPostsWithUserIdOne()));
-
-            _postsUserRepistoryMock.Setup(x => x.GetPostById(101))
-                 .Returns(Task.FromResult((PostUser)null));
-
-            _postsUserRepistoryMock.Setup(x => x.GetPostsByUserId(11))
-                 .Returns(Task.FromResult((List<PostUser>)null));
-
-            _postsUserRepistory = _postsUserRepistoryMock.Object;
+            _postsUserRepistory = new PostsUserRepository();
         }
 
         #region PositiveScenarios
-        //The PostId must be between 1 and 10= to be valid
-        [Theory]
-        [InlineData(1)]
-        public async Task ShouldReturnAPost_WhenIdValid(int id)
-        {
-            var postUserActual = await _postsUserRepistory.GetPostById(id);
 
-            Assert.Equal(postUser, postUserActual);
+        [Fact]
+        public void GetAllPostsUser_ShouldReturnAllPosts()
+        {
+            var postsUserActual = _postsUserRepistory.GetAllPostsUser();
+
+            Assert.NotNull(postsUserActual);
+            Assert.Equal(100, postsUserActual.Count);
         }
 
-        //The UserId must be between 1 and 10 to be valid
-        [Theory]
-        [InlineData(1)]
-        public async Task ShouldReturnAListPosts_WhenUserIdValid(int id)
+        [Fact]
+        public void GetGroupPostsByUserId_ShouldReturnAllGroupPostsByUserId()
         {
-            var postsUserActual = await _postsUserRepistory.GetPostsByUserId(id);
+            var groupingPostsUserActual = _postsUserRepistory.GetGroupPostsByUserId();
 
-            Assert.Equivalent(GetPostsWithUserIdOne(), postsUserActual, false);
+            Assert.NotNull(groupingPostsUserActual);
+
+            foreach (var groupingPosts in groupingPostsUserActual)
+            {
+                Assert.Equal(10, groupingPosts.Value.Count);
+            }
+
+        }
+
+        [Fact]
+        public void GetAllPostsUser_ShouldSortingByIds()
+        {
+            var postsUserActual = _postsUserRepistory.GetAllPostsUser();
+            var postsUserExpected = postsUserActual?.OrderBy(x => x.Id).ToList();
+            Assert.NotNull(postsUserActual);
+            Assert.True(postsUserExpected?.SequenceEqual(postsUserActual));
+        }
+
+        [Fact]
+        public void GetPostById_ShouldReturnPostWithSameId()
+        {
+            var postUserActual = _postsUserRepistory.GetPostById(1);
+
+            Assert.NotNull(postUserActual);
+            Assert.Equal(1, postUserActual.Id);
+        }
+
+        [Fact]
+        public void GetPostById_ShouldReturnSamePost()
+        {
+            var postUserActual = _postsUserRepistory.GetPostById(1);
+
+            var postUserExpected = GetPostUserWithIdOne();
+
+            Assert.NotNull(postUserActual);
+            Assert.Equal(postUserExpected.Id, postUserActual.Id);
+            Assert.Equal(postUserExpected.UserId, postUserActual.UserId);
+            Assert.Equal(postUserExpected.Title, postUserActual.Title);
+            Assert.Equal(postUserExpected.Body, postUserActual.Body);
+        }
+
+        [Fact]
+        public void GetPostsByUserId_ShouldReturnAllsPostWithSameUserId()
+        {
+            var postsUserActual = _postsUserRepistory.GetPostsByUserId(1);
+
+            Assert.NotNull(postsUserActual);
+            Assert.Equal(10, postsUserActual.Count);
         }
 
         #endregion
 
         #region NegativeScenarios
-        //The Post Id must be specified and less or equal than 100
-        [Theory]
-        [InlineData(101)]
-        [InlineData(null)]
-        public async Task ShouldReturNull_WhenPostIdInvalid(int id)
+        [Fact]
+        public void GetPostById_ShouldNotReturnPostWithDifferentId()
         {
-            var postUserActual = await _postsUserRepistory.GetPostById(id);
+            var postsUserActual = _postsUserRepistory.GetPostById(1);
 
-            Assert.Null(postUserActual);
+            Assert.NotNull(postsUserActual);
+            Assert.NotEqual(2, postsUserActual.Id);
         }
 
-        //The User Id must be specified and less or equal than 100
         [Theory]
-        [InlineData(11)]
         [InlineData(null)]
-        public async Task ShouldReturNull_WhenPostUserIdInvalid(int id)
+        [InlineData(101)]
+        public void GetPostById_ShouldNotReturnPostWithInvalidId(int? id)
         {
-            var postsUserActual = await _postsUserRepistory.GetPostsByUserId(id);
+            var postsUserActual = _postsUserRepistory.GetPostById(id ?? 0);
 
             Assert.Null(postsUserActual);
         }
 
-        //The title and the body must be specified
         [Theory]
-        [InlineData(1, "", "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto")]
-        [InlineData(1, "sunt aut facere repellat provident occaecati excepturi optio reprehenderit", "")]
-        public async Task ShoulNotReturnPost_WhenTitleOrBodyPostNotSpecified(int id, string title, string body)
+        [InlineData(null)]
+        [InlineData(11)]
+        public void GetPostsByUserId_ShouldNotReturnAnyPostWithInvalidUserId(int? id)
         {
-            var postUserActual = await _postsUserRepistory.GetPostById(id);
-            var expectedPostUser = new PostUser
-            {
-                UserId = postUserActual.Id,
-                Title = title,
-                Body = body,
-                Id = id
-            };
+            var postsUserActual = _postsUserRepistory.GetPostsByUserId(id ?? 0);
 
-            Assert.NotEqual(expectedPostUser, postUserActual);
+            Assert.Empty(postsUserActual);
+        }
+
+        [Theory]
+        [InlineData(1, null)]
+        [InlineData(1, "")]
+        public void GetPostById_ShouldNotReturnPostWithInvalidTitle(int id, string title)
+        {
+            var postsUserActual = _postsUserRepistory.GetPostById(id);
+
+            Assert.NotNull(postsUserActual);
+            Assert.NotEqual(title, postsUserActual.Title);
+        }
+
+        [Theory]
+        [InlineData(1, null)]
+        [InlineData(1, "")]
+        public void GetPostById_ShouldNotReturnPostWithInvalidBody(int id, string body)
+        {
+            var postsUserActual = _postsUserRepistory.GetPostById(id);
+
+            Assert.NotNull(postsUserActual);
+            Assert.NotEqual(body, postsUserActual.Body);
         }
         #endregion
 
         private PostUser GetPostUserWithIdOne()
-        { 
-            return  new PostUser
+        {
+            return new PostUser
             {
                 UserId = 1,
                 Id = 1,
@@ -106,27 +142,5 @@ namespace UnitestPart2
                 Body = "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
             };
         }
-
-        private List<PostUser> GetPostsWithUserIdOne()
-        {
-            return new List<PostUser>
-            {
-                new PostUser
-                {
-                    UserId = 1,
-                    Id = 1,
-                    Title = "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-                    Body = "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\\nreprehenderit molestiae ut ut quas totam\\nnostrum rerum est autem sunt rem eveniet architecto"
-
-                },
-                new PostUser
-                {
-                    UserId = 1,
-                    Id = 2,
-                    Title = "qui est esse",
-                    Body = "et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut"
-                }
-            };
-        }        
     }
 }
